@@ -3,7 +3,7 @@ NEATMKFN
 
 The Neatmkfn program creates Neatroff font description files from AFM
 (Adobe Font Metrics), TrueType, and OpenType fonts.  See the output of
-"mkfn -h" for the available options.  Note that for OpenType fonts,
+"neatmkfn -h" for the available options.  Note that for OpenType fonts,
 Neatmkfn cannot obtain glyph bounding boxes accurately.  Therefore, if
 you plan to use a font in Neateqn blocks, convert the font to TrueType
 and generate the font description from that.
@@ -11,3 +11,52 @@ and generate the font description from that.
 The included ./gen.sh script invokes mkfn to create a complete output
 device for neatroff.  Change the variables in that file before running
 it.
+
+INSTALLATION
+============
+
+- Arch Linux: `paru -S neatroff-suite-git`
+
+CONVERSION
+==========
+
+Convert fonts and install to use inside Neatroff.  
+
+- Install "a new" (to Neatroff) local TrueType (.ttf) font:
+
+      neatmkfn -b -l -o -r720 -Slatn -tLiberationSans-Regular -f/usr/share/neatroff/font/devutf
+
+- To install an OpenType (.otf) font, convert to TrueType with `fontforge`:
+
+      fontforge -lang=ff -c "Open(\"LiberationSans-Regular.ttf\"); Generate(\"$TTF\");"
+
+- Batch convert and install all TrueType (.ttf) and OpenType (.otf) found local in the system:
+
+      sudo bash /usr/share/doc/neatroff-suite/gen.sh
+
+- List Available Fonts:
+
+      ls /usr/share/neatroff/font/devutf
+
+USE INSIDE A DOCUMENT
+=====================
+
+- Minimal example: define new font as F1, use it later with: `.ft F1`
+
+      .fp - F1 LiberationSans-Regular
+      .PP
+      01234567890 AaBbCcDdEeFfGg ÑñÇç : Default Font
+      .PP
+      .ft F1
+      01234567890 AaBbCcDdEeFfGg ÑñÇç : LiberationSans-Regular
+
+DOCUMENTATION
+=============
+
+- Manual pages: `man neatmkfn`
+- [Getting Started with Neatroff (pdf)](http://litcave.rudi.ir/neatstart.pdf)
+
+FORK
+====
+
+I did this fork, because didn't work for me as it was (documentation and shell script).
